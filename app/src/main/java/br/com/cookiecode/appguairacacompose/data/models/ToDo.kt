@@ -1,0 +1,11 @@
+package br.com.cookiecode.appguairacacompose.data.models
+
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "todos")
+data class ToDo(
+    @PrimaryKey val id: Int,
+    @ColumnInfo(name = "name") val name: String,
+)
