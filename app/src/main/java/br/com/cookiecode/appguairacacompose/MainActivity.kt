@@ -12,6 +12,7 @@ import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
 import br.com.cookiecode.appguairacacompose.ui.screens.todo_lists.TodoListDetail
 import br.com.cookiecode.appguairacacompose.ui.screens.todo_lists.TodoListForm
+import br.com.cookiecode.appguairacacompose.ui.screens.todo_lists.TodoListFormScreen
 import br.com.cookiecode.appguairacacompose.ui.screens.todo_lists.TodoLists
 import br.com.cookiecode.appguairacacompose.ui.theme.AppGuairacaComposeTheme
 
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity() {
                 Surface(color = MaterialTheme.colors.background) {
                     NavHost(navController = navController, startDestination = "todo_lists") {
                         composable("todo_lists") { TodoLists(navController) }
-                        composable("todo_list_form") { TodoListForm(navController) }
+                        composable("todo_list_form") { TodoListFormScreen(navController) }
                         composable(
                             "todo_list/{id}",
                             arguments = listOf(navArgument("id") { type = NavType.IntType })
