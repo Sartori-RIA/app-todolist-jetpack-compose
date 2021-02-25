@@ -3,12 +3,12 @@ package br.com.cookiecode.appguairacacompose.data.models
 import androidx.room.Embedded
 import androidx.room.Relation
 
-data class ToDoWithItems(
+data class TodoListWithItems(
     @Embedded
-    val todo: ToDo,
+    val todo: TodoList,
     @Relation(
         parentColumn = "id",
-        entityColumn = "to_do_id",
+        entityColumn = "todo_list_id",
     )
-    var items: List<ToDoItem>
+    var items: List<TodoListItem>
 )

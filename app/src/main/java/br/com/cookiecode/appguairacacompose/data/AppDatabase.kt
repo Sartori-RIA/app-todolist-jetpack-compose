@@ -6,14 +6,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import br.com.cookiecode.appguairacacompose.data.converters.DateTypeConverter
-import br.com.cookiecode.appguairacacompose.data.dao.ToDoDao
-import br.com.cookiecode.appguairacacompose.data.models.ToDo
-import br.com.cookiecode.appguairacacompose.data.models.ToDoItem
+import br.com.cookiecode.appguairacacompose.data.dao.TodoListDao
+import br.com.cookiecode.appguairacacompose.data.models.TodoList
+import br.com.cookiecode.appguairacacompose.data.models.TodoListItem
 
-@Database(entities = [ToDo::class, ToDoItem::class], version = 1)
+@Database(entities = [TodoList::class, TodoListItem::class], version = 1)
 @TypeConverters(DateTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun toDoDao(): ToDoDao
+    abstract fun toDoDao(): TodoListDao
 
     companion object {
         var INSTANCE: AppDatabase? = null

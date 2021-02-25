@@ -5,34 +5,33 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.navArgument
+import androidx.navigation.compose.rememberNavController
+import br.com.cookiecode.appguairacacompose.ui.screens.todo_lists.TodoListDetail
+import br.com.cookiecode.appguairacacompose.ui.screens.todo_lists.TodoListForm
+import br.com.cookiecode.appguairacacompose.ui.screens.todo_lists.TodoLists
 import br.com.cookiecode.appguairacacompose.ui.theme.AppGuairacaComposeTheme
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val navController = rememberNavController()
             AppGuairacaComposeTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android")
+                    NavHost(navController = navController, startDestination = "todo_lists") {
+                        composable("todo_lists") { TodoLists(navController) }
+                        composable("todo_list_form") { TodoListForm(navController) }
+                        composable(
+                            "todo_list/{id}",
+                            arguments = listOf(navArgument("id") { type = NavType.IntType })
+                        ) { TodoListDetail(navController) }
+                    }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    AppGuairacaComposeTheme {
-        Greeting("Android")
     }
 }
