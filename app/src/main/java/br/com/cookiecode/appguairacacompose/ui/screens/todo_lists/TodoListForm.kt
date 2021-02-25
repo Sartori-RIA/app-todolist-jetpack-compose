@@ -1,17 +1,18 @@
 package br.com.cookiecode.appguairacacompose.ui.screens.todo_lists
 
 import android.util.Log
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
-import androidx.compose.material.TextField
+import androidx.compose.material.*
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 
 class TodoListViewModel : ViewModel() {
@@ -23,23 +24,43 @@ class TodoListViewModel : ViewModel() {
     }
 }
 
+@Composable
+fun TodoListFormScreen(
+    navController: NavHostController,
+    todoListViewModel: TodoListViewModel = viewModel()
+) {
+    val name by todoListViewModel.name.observeAsState("")
+
+    TodoListForm(name,
+        onSave = {
+            Log.d("CLICK", "SALVAR")
+        },
+        onCancel = { navController.popBackStack() },
+        onValueChange = { todoListViewModel.onNameChanged(it) }
+    )
+}
+
 @Preview
 @Composable
-fun TodoListForm(navController: NavHostController) {
-    var name: String = ""
+fun TodoListForm(
+    name: String,
+    onSave: () -> Unit,
+    onCancel: () -> Unit,
+    onValueChange: (String) -> Unit
+) {
     Surface(Modifier.fillMaxSize()) {
-        TextField(
-            value = name,
-            onValueChange = { name = it },
-            label = { Text("Nome") }
-        )
-        TextButton(
-            onClick = {
-                Log.d("CLICK", "SALVAR")
-            },
-            content = {
-                Text("Salvar")
-            }
-        )
+        Column {
+            OutlinedTextField(
+                value = name,
+                onValueChange = onValueChange,
+                label = { Text("Nome") }
+            )
+            TextButton(
+                onClick = onSave,
+                content = {
+                    Text("Salvar")
+                }
+            )
+        }
     }
 }
