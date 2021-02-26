@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import br.com.cookiecode.appguairacacompose.data.converters.DateTypeConverter
 import br.com.cookiecode.appguairacacompose.data.dao.TodoListDao
+import br.com.cookiecode.appguairacacompose.data.dao.TodoListItemDao
 import br.com.cookiecode.appguairacacompose.data.models.TodoList
 import br.com.cookiecode.appguairacacompose.data.models.TodoListItem
 
@@ -15,19 +16,26 @@ import br.com.cookiecode.appguairacacompose.data.models.TodoListItem
 abstract class AppDatabase : RoomDatabase() {
     abstract fun toDoDao(): TodoListDao
 
-    companion object {
-        var INSTANCE: AppDatabase? = null
+    abstract fun todoListItemDao(): TodoListItemDao
 
-        fun getAppDatabase(context: Context): AppDatabase? {
-            if (INSTANCE == null)
-                synchronized(AppDatabase::class) {
-                    INSTANCE = Room.databaseBuilder(
-                        context.applicationContext,
-                        AppDatabase::class.java,
-                        "todo_list_app_db"
-                    ).build()
-                }
-            return INSTANCE
+    companion object {
+        @Volatile
+        private var INSTANCE: AppDatabase? = null
+
+        fun getAppDatabase(context: Context): AppDatabase {
+            val tempInstance = INSTANCE
+            if (tempInstance != null) {
+                return tempInstance
+            }
+            synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase::class.java,
+                    "todo_list_app_db"
+                ).build()
+                INSTANCE = instance
+                return instance
+            }
         }
 
         fun destroyDatabase() {
