@@ -3,6 +3,7 @@ package br.com.cookiecode.appguairacacompose
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.navigation.NavType
@@ -11,11 +12,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
 import br.com.cookiecode.appguairacacompose.ui.screens.todo_lists.TodoListDetail
-import br.com.cookiecode.appguairacacompose.ui.screens.todo_lists.TodoListForm
 import br.com.cookiecode.appguairacacompose.ui.screens.todo_lists.TodoListFormScreen
 import br.com.cookiecode.appguairacacompose.ui.screens.todo_lists.TodoLists
 import br.com.cookiecode.appguairacacompose.ui.theme.AppGuairacaComposeTheme
 
+@ExperimentalMaterialApi
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +30,12 @@ class MainActivity : AppCompatActivity() {
                         composable(
                             "todo_list/{id}",
                             arguments = listOf(navArgument("id") { type = NavType.IntType })
-                        ) { TodoListDetail(navController) }
+                        ) {
+                            TodoListDetail(
+                                navController = navController,
+                                id = it.arguments?.getInt("id")!!
+                            )
+                        }
                     }
                 }
             }

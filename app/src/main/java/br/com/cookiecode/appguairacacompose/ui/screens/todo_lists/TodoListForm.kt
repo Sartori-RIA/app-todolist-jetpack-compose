@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -18,6 +19,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import br.com.cookiecode.appguairacacompose.R
 import br.com.cookiecode.appguairacacompose.data.models.TodoList
 import br.com.cookiecode.appguairacacompose.data.repositories.TodoListRepository
 import kotlinx.coroutines.Dispatchers
@@ -57,7 +59,6 @@ fun TodoListFormScreen(
     )
 }
 
-@Preview
 @Composable
 fun TodoListForm(
     name: String,
@@ -66,16 +67,16 @@ fun TodoListForm(
     onValueChange: (String) -> Unit
 ) {
     Surface(Modifier.fillMaxSize()) {
-        Column {
+        Column(Modifier.fillMaxSize()) {
             OutlinedTextField(
                 value = name,
                 onValueChange = onValueChange,
-                label = { Text("Nome") }
+                label = { Text(stringResource(R.string.label_name)) }
             )
             TextButton(
                 onClick = onSave,
                 content = {
-                    Text("Salvar")
+                    Text(stringResource(R.string.btn_save))
                 }
             )
         }

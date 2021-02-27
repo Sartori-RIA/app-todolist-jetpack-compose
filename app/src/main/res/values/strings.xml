@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">App Guairaca Compose</string>
+    <string name="add_todolist">Add Todo List</string>
+    <string name="add_item">Add Item</string>
+    <string name="label_name">Nome</string>
+    <string name="btn_save">Salvar</string>
 </resources>
