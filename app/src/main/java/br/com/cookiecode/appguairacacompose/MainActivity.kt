@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
                         composable("todo_lists") { TodoLists(navController) }
                         composable("todo_list_form") { TodoListFormScreen(navController) }
                         composable(
-                            "todo_list/{id}",
+                            "todo_lists/{id}",
                             arguments = listOf(navArgument("id") { type = NavType.IntType })
                         ) {
                             TodoListDetail(

@@ -1,110 +1,130 @@
 package br.com.cookiecode.appguairacacompose.ui.screens.todo_lists
 
 import android.app.Application
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import br.com.cookiecode.appguairacacompose.R
 import br.com.cookiecode.appguairacacompose.data.models.TodoList
-import br.com.cookiecode.appguairacacompose.data.models.TodoListWithItems
+import br.com.cookiecode.appguairacacompose.data.models.TodoListItem
+import br.com.cookiecode.appguairacacompose.data.repositories.TodoListItemRepository
 import br.com.cookiecode.appguairacacompose.data.repositories.TodoListRepository
+import br.com.cookiecode.appguairacacompose.ui.buttons.AddFAB
+import br.com.cookiecode.appguairacacompose.ui.screens.todo_list_item.ItemCard
+import br.com.cookiecode.appguairacacompose.ui.screens.todo_list_item.ItemForm
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class TodoListDetailViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = TodoListRepository(application)
-    private val _data = MutableLiveData(
-        TodoListWithItems(
-            items = listOf(),
-            todo = TodoList("")
-        )
-    )
+    private val itemRepository = TodoListItemRepository(application)
 
-    var data: LiveData<TodoListWithItems> = _data
+    fun items(id: Int) = itemRepository.getItemsByTodoList(id)
 
-    fun onIdChanged(id: Int) {
-        data = repository.show(id)
+    fun todoList(id: Int) = repository.show(id)
+
+    fun updateItem(item: TodoListItem) {
+        viewModelScope.launch(Dispatchers.IO) {
+            itemRepository.update(item)
+        }
     }
 }
 
+@ExperimentalFoundationApi
 @Composable
 fun TodoListDetail(
     navController: NavHostController,
     todoListDetailViewModel: TodoListDetailViewModel = viewModel(),
     id: Int
 ) {
-    todoListDetailViewModel.onIdChanged(id)
+    val items by todoListDetailViewModel.items(id).observeAsState(listOf())
+    val todolist by todoListDetailViewModel.todoList(id).observeAsState(TodoList())
+    var showPopup by remember { mutableStateOf(false) }
 
-    val todoList by todoListDetailViewModel.data.observeAsState(
-        TodoListWithItems(
-            items = listOf(),
-            todo = TodoList("")
-        )
-    )
+    val lazyData = rememberLazyListState()
 
     Scaffold(
         topBar = {
-            TopAppBar(title = {
-                Text(todoList.todo.name, textAlign = TextAlign.Center)
-            })
+            TopAppBar(
+                title = { Text(todolist.name, textAlign = TextAlign.Center) }
+            )
         },
         content = {
-            Text(todoList.todo.name)
+            Column {
+                TodolistHeader(todolist)
+                Spacer(Modifier.padding(16.dp))
+                LazyColumn(state = lazyData) {
+                    items(items) { element ->
+                        Column {
+                            Row(verticalAlignment = Alignment.CenterVertically) {}
+                            ItemCard(item = element, updateItem = {
+                                todoListDetailViewModel.updateItem(it)
+                            })
+                        }
+                    }
+                }
+            }
+
+            if (showPopup) {
+                ItemForm(
+                    dismissDialog = {
+                        showPopup = false
+                    },
+                    todoListId = id
+                )
+            }
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                },
-                content = {
-                    Icon(
-                        imageVector = Icons.Rounded.Add,
-                        contentDescription = stringResource(R.string.add_item),
-                    )
-                }
+            AddFAB(
+                onClick = { showPopup = true },
+                id = R.string.add_item
             )
         }
     )
 }
 
-@Preview
 @Composable
-fun ItemCard() {
-    val padding = 16.dp
-    var checked = false
-    Column {
-        Row(verticalAlignment = Alignment.CenterVertically) {}
-        Spacer(Modifier.padding(padding))
-        Card(
-            shape = RoundedCornerShape(4.dp),
-            elevation = 4.dp,
+fun TodolistHeader(todoList: TodoList) {
+    val progress by remember { mutableStateOf(1f) }
+    val animatedProgress by animateFloatAsState(
+        targetValue = progress,
+        animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec
+    )
+    Row(
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(20.dp)
+    ) {
+        Column(
             modifier = Modifier
-                .padding(padding)
-                .height(50.dp)
                 .fillMaxWidth()
+                .padding(vertical = 10.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(padding),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(" item 1")
-                Checkbox(checked = checked, onCheckedChange = { checked = it })
-            }
+            Text(todoList.name)
+            LinearProgressIndicator(
+                progress = animatedProgress,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(10.dp)
+                    .padding(vertical = 5.dp)
+            )
         }
+
     }
 }
+

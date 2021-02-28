@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "e157a9b19853e08862acffedf4303198",
+    "identityHash": "8456309364fd7b0ddc66be3d30cddb8a",
     "entities": [
       {
         "tableName": "todo_lists",
@@ -32,13 +32,13 @@
       },
       {
         "tableName": "todo_list_items",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `status` TEXT NOT NULL, `todo_list_id` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `done` INTEGER NOT NULL, `todo_list_id` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
             "affinity": "INTEGER",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "name",
@@ -47,9 +47,9 @@
             "notNull": true
           },
           {
-            "fieldPath": "status",
-            "columnName": "status",
-            "affinity": "TEXT",
+            "fieldPath": "done",
+            "columnName": "done",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -63,7 +63,7 @@
           "columnNames": [
             "id"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [],
         "foreignKeys": []
@@ -72,7 +72,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e157a9b19853e08862acffedf4303198')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8456309364fd7b0ddc66be3d30cddb8a')"
     ]
   }
 }

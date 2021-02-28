@@ -7,13 +7,19 @@ import br.com.cookiecode.appguairacacompose.data.models.TodoListItem
 @Dao
 interface TodoListItemDao {
 
-    @Query("SELECT * from TODO_LIST_ITEMS WHERE todo_list_id = :todoListId")
+    @Query("SELECT * FROM todo_list_items")
+    fun all(): LiveData<List<TodoListItem>>
+
+    @Query("SELECT * from todo_list_items WHERE todo_list_id = :todoListId")
     fun getTodoListItems(todoListId: Int): LiveData<List<TodoListItem>>
+
+    @Query("SELECT * FROM todo_list_items WHERE id = :id LIMIT 1")
+    fun show(id: Int): LiveData<TodoListItem>
 
     @Insert
     fun create(item: TodoListItem)
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     fun update(item: TodoListItem)
 
     @Delete

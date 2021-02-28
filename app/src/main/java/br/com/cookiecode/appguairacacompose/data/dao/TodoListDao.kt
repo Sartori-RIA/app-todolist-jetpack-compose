@@ -3,7 +3,6 @@ package br.com.cookiecode.appguairacacompose.data.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import br.com.cookiecode.appguairacacompose.data.models.TodoList
-import br.com.cookiecode.appguairacacompose.data.models.TodoListWithItems
 
 @Dao
 interface TodoListDao {
@@ -11,13 +10,13 @@ interface TodoListDao {
     @Query("SELECT * FROM todo_lists")
     fun all(): LiveData<List<TodoList>>
 
-    @Query("SELECT * FROM todo_lists WHERE id = :id")
-    fun show(id: Int): LiveData<TodoListWithItems>
+    @Query("SELECT * FROM todo_lists WHERE id = :id LIMIT 1")
+    fun show(id: Int): LiveData<TodoList>
 
     @Insert
     fun create(data: TodoList)
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     fun update(data: TodoList)
 
     @Delete

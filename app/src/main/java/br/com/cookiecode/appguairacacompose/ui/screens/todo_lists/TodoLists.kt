@@ -2,15 +2,12 @@ package br.com.cookiecode.appguairacacompose.ui.screens.todo_lists
 
 import android.app.Application
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -26,6 +23,7 @@ import androidx.navigation.compose.navigate
 import br.com.cookiecode.appguairacacompose.R
 import br.com.cookiecode.appguairacacompose.data.models.TodoList
 import br.com.cookiecode.appguairacacompose.data.repositories.TodoListRepository
+import br.com.cookiecode.appguairacacompose.ui.buttons.AddFAB
 
 class TodoListsViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = TodoListRepository(application)
@@ -50,24 +48,17 @@ fun TodoLists(
         },
         content = {
             LazyColumn(state = lazyData) {
-                itemsIndexed(items) { _, element ->
+                items(items) { element ->
                     TodoListCard(element, onEdit = {
-                        navController.navigate("todo_list/${element.id}")
+                        navController.navigate("todo_lists/${element.id}")
                     })
                 }
             }
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    navController.navigate("todo_list_form")
-                },
-                content = {
-                    Icon(
-                        imageVector = Icons.Rounded.Add,
-                        contentDescription = stringResource(R.string.add_todolist),
-                    )
-                }
+            AddFAB(
+                onClick = { navController.navigate("todo_list_form") },
+                id = R.string.add_todolist
             )
         }
     )
@@ -77,14 +68,7 @@ fun TodoLists(
 @Composable
 fun TodoListCard(element: TodoList, onEdit: () -> Unit) {
     val padding = 16.dp
-    val swipeState = rememberSwipeableState(initialValue = false)
 
-    /*
-    .swipeable(
-                    state = swipeState,
-                    orientation = Orientation.Horizontal,
-                )
-     */
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) { /*...*/ }
         Spacer(Modifier.padding(padding))
@@ -96,7 +80,6 @@ fun TodoListCard(element: TodoList, onEdit: () -> Unit) {
                 .padding(padding)
                 .height(100.dp)
                 .fillMaxWidth()
-
         ) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
