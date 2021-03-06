@@ -5,10 +5,9 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ModeEdit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -39,7 +38,14 @@ fun TodoListDetail(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(todolist.name, textAlign = TextAlign.Center) }
+                title = { Text(todolist.name, textAlign = TextAlign.Center) },
+                actions = {
+                    IconButton(onClick = {
+                        navController.navigate("todo_lists/${id}/edit")
+                    }) {
+                        Icon(Icons.Rounded.ModeEdit, contentDescription = "")
+                    }
+                }
             )
         },
         content = {
@@ -54,8 +60,6 @@ fun TodoListDetail(
                         todoListDetailViewModel.deleteItem(it)
                     }
                 )
-
-
             }
         },
         floatingActionButton = {

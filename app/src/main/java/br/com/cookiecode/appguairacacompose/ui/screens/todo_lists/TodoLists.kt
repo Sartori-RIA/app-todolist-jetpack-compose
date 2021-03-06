@@ -52,7 +52,7 @@ fun TodoListsScreen(
         },
         floatingActionButton = {
             AddFAB(
-                onClick = { navController.navigate("todo_list_form") },
+                onClick = { navController.navigate("todo_lists/add") },
                 id = R.string.add_todolist
             )
         }

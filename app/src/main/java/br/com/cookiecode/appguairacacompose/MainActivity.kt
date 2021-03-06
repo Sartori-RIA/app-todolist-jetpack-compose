@@ -32,7 +32,21 @@ class MainActivity : AppCompatActivity() {
                 Surface(color = MaterialTheme.colors.background) {
                     NavHost(navController = navController, startDestination = "todo_lists") {
                         composable("todo_lists") { TodoListsScreen(navController) }
-                        composable("todo_list_form") { TodoListFormScreen(navController) }
+                        composable("todo_lists/add") {
+                            TodoListFormScreen(
+                                navController,
+                                id = null
+                            )
+                        }
+                        composable(
+                            "todo_lists/{id}/edit",
+                            arguments = listOf(navArgument("id") { type = NavType.IntType })
+                        ) {
+                            TodoListFormScreen(
+                                navController = navController,
+                                id = it.arguments!!.getInt("id", 0)
+                            )
+                        }
                         composable(
                             "todo_lists/{id}",
                             arguments = listOf(navArgument("id") { type = NavType.IntType })

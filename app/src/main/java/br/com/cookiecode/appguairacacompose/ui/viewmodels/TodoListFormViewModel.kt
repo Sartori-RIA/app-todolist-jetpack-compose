@@ -20,13 +20,15 @@ class TodoListFormViewModel(application: Application) : AndroidViewModel(applica
         _name.value = newName
     }
 
+    fun edit(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.update(TodoList(id = id, name = _name.value.toString()))
+        }
+    }
+
     fun save() {
         viewModelScope.launch(Dispatchers.IO) {
-            try {
-                repository.create(TodoList(name = _name.value.toString()))
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            repository.create(TodoList(name = _name.value.toString()))
         }
     }
 }

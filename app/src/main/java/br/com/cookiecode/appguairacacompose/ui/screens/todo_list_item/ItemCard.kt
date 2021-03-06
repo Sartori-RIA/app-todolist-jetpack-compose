@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -13,7 +15,7 @@ import br.com.cookiecode.appguairacacompose.data.models.TodoListItem
 @Composable
 fun ItemCard(item: TodoListItem, updateItem: (TodoListItem) -> Unit, dismiss: Boolean) {
     val padding = 10.dp
-
+    val checkedState = remember { mutableStateOf(item.done) }
     Card(
         shape = RoundedCornerShape(4.dp),
         elevation = animateDpAsState(if (dismiss) 8.dp else 4.dp).value,
@@ -31,8 +33,9 @@ fun ItemCard(item: TodoListItem, updateItem: (TodoListItem) -> Unit, dismiss: Bo
         ) {
             Text(item.name)
             Checkbox(
-                checked = item.done,
+                checked = checkedState.value,
                 onCheckedChange = {
+                    checkedState.value = it
                     item.done = it
                     updateItem(item)
                 },

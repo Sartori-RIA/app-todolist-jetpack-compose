@@ -1,6 +1,7 @@
 package br.com.cookiecode.appguairacacompose.ui.viewmodels
 
 import android.app.Application
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import br.com.cookiecode.appguairacacompose.data.models.TodoListItem
