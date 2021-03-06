@@ -5,6 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -23,6 +24,7 @@ import br.com.cookiecode.appguairacacompose.ui.buttons.AddFAB
 import br.com.cookiecode.appguairacacompose.ui.screens.todo_list_item.TodoListItems
 import br.com.cookiecode.appguairacacompose.ui.viewmodels.TodoListDetailViewModel
 
+@ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @ExperimentalFoundationApi
 @Composable
@@ -44,9 +46,16 @@ fun TodoListDetail(
             Column {
                 TodoListHeader(todolist)
                 Spacer(Modifier.padding(16.dp))
-                TodoListItems(items = items) {
-                    todoListDetailViewModel.updateItem(it)
-                }
+                TodoListItems(items = items,
+                    updateItem = {
+                        todoListDetailViewModel.updateItem(it)
+                    },
+                    deleteItem = {
+                        todoListDetailViewModel.deleteItem(it)
+                    }
+                )
+
+
             }
         },
         floatingActionButton = {

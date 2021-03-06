@@ -9,7 +9,8 @@ import br.com.cookiecode.appguairacacompose.data.repositories.TodoListRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class TodoListDetailViewModel(application: Application) : AndroidViewModel(application) {
+class TodoListDetailViewModel(application: Application) :
+    AndroidViewModel(application) {
     private val repository = TodoListRepository(application)
     private val itemRepository = TodoListItemRepository(application)
 
@@ -20,6 +21,12 @@ class TodoListDetailViewModel(application: Application) : AndroidViewModel(appli
     fun updateItem(item: TodoListItem) {
         viewModelScope.launch(Dispatchers.IO) {
             itemRepository.update(item)
+        }
+    }
+
+    fun deleteItem(item: TodoListItem) {
+        viewModelScope.launch(Dispatchers.IO) {
+            itemRepository.delete(item)
         }
     }
 }
