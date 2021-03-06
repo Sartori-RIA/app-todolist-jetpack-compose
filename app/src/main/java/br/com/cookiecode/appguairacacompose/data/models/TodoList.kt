@@ -7,6 +7,6 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "todo_lists")
 data class TodoList(
     @PrimaryKey(autoGenerate = true)
-    var id: Int? = null,
+    var id: Int = 0,
     @ColumnInfo(name = "name") var name: String = "",
 )

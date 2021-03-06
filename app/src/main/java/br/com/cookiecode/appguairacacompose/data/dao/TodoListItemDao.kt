@@ -7,10 +7,10 @@ import br.com.cookiecode.appguairacacompose.data.models.TodoListItem
 @Dao
 interface TodoListItemDao {
 
-    @Query("SELECT * FROM todo_list_items")
+    @Query("SELECT * FROM todo_list_items ORDER BY id DESC")
     fun all(): LiveData<List<TodoListItem>>
 
-    @Query("SELECT * from todo_list_items WHERE todo_list_id = :todoListId")
+    @Query("SELECT * from todo_list_items WHERE todo_list_id = :todoListId ORDER BY id DESC")
     fun getTodoListItems(todoListId: Int): LiveData<List<TodoListItem>>
 
     @Query("SELECT * FROM todo_list_items WHERE id = :id LIMIT 1")

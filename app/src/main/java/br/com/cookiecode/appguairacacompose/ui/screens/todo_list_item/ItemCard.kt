@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import br.com.cookiecode.appguairacacompose.data.models.TodoListItem
 
-
 @Composable
 fun ItemCard(item: TodoListItem, updateItem: (TodoListItem) -> Unit) {
     val padding = 10.dp
