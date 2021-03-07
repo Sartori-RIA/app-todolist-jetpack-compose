@@ -20,6 +20,12 @@ class TodoListFormViewModel(application: Application) : AndroidViewModel(applica
         _name.value = newName
     }
 
+    // TODO when using the same component and ViewModel is throwing a exception
+    fun onIdChange(id: Int) {
+        if (id > 0)
+            _name.value = repository.show(id).value?.name
+    }
+
     fun edit(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.update(TodoList(id = id, name = _name.value.toString()))

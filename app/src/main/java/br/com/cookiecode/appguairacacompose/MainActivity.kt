@@ -34,8 +34,8 @@ class MainActivity : AppCompatActivity() {
                         composable("todo_lists") { TodoListsScreen(navController) }
                         composable("todo_lists/add") {
                             TodoListFormScreen(
-                                navController,
-                                id = null
+                                navController = navController,
+                                id = 0
                             )
                         }
                         composable(

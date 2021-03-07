@@ -30,9 +30,10 @@ import br.com.cookiecode.appguairacacompose.ui.viewmodels.TodoListFormViewModel
 fun TodoListFormScreen(
     navController: NavHostController,
     todoListViewModel: TodoListFormViewModel = viewModel(),
-    id: Int?
+    id: Int = 0
 ) {
     val name by todoListViewModel.name.observeAsState("")
+    // todoListViewModel.onIdChange(id)
 
     Scaffold(
         topBar = {
