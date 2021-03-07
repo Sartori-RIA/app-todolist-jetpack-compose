@@ -74,7 +74,8 @@ fun ItemForm(
     ) {
         Text(
             text = stringResource(R.string.add_item),
-            style = TextStyle(textAlign = TextAlign.Center)
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.h5
         )
 
         OutlinedTextField(

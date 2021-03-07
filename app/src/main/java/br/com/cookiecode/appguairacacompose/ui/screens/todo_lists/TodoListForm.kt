@@ -6,6 +6,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -32,15 +34,22 @@ fun TodoListFormScreen(
 ) {
     val name by todoListViewModel.name.observeAsState("")
 
-
     Scaffold(
         topBar = {
-            TopAppBar {
-                Text(
-                    text = stringResource(R.string.add_todolist),
-                    style = TextStyle(textAlign = TextAlign.Center)
-                )
-            }
+            TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(R.string.add_todolist),
+                        style = TextStyle(textAlign = TextAlign.Center),
+                    )
+                },
+                actions = {
+                    IconButton(
+                        onClick = { navController.popBackStack() },
+                        content = { Icon(Icons.Rounded.Close, "") }
+                    )
+                }
+            )
         },
         content = {
             Surface(Modifier.fillMaxSize()) {
@@ -49,7 +58,6 @@ fun TodoListFormScreen(
                         todoListViewModel.save()
                         navController.popBackStack()
                     },
-                    onCancel = { navController.popBackStack() },
                     onValueChange = { todoListViewModel.onNameChanged(it) }
                 )
             }
@@ -61,7 +69,6 @@ fun TodoListFormScreen(
 fun TodoListForm(
     name: String,
     onSave: () -> Unit,
-    onCancel: () -> Unit,
     onValueChange: (String) -> Unit
 ) {
     val scrollState = rememberScrollState()
@@ -78,7 +85,7 @@ fun TodoListForm(
         Text(
             text = stringResource(R.string.add_todolist),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.h4
+            style = MaterialTheme.typography.h5
         )
         OutlinedTextField(
             modifier = Modifier.padding(10.dp),
